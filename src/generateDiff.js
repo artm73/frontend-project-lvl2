@@ -1,6 +1,6 @@
 import { program } from 'commander/esm.mjs';
 import readJsonFile from './readJsonFile.js';
-import showDiff from './findDiff.js';
+import showDiff from './showDiff.js';
 
 const genDiff = () => {
   program

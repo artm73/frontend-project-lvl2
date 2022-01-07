@@ -10,3 +10,4 @@ rules:
   no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
   no-console: 0
   import/extensions: 0
+  no-undef: 0
