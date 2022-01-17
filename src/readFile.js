@@ -1,12 +1,15 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import parse from './parsers.js';
 
-const readJsonFile = (filepath) => {
+const readFile = (filepath) => {
   const cwd = process.cwd();
   const absolutePath = path.resolve(cwd, filepath);
   const fileContent = JSON.parse(fs.readFileSync(absolutePath, 'utf-8'));
+  const fileExt = path.extname(filepath);
+  const parsedContent = parse(fileContent, fileExt);
 
-  return fileContent;
+  return parsedContent;
 };
 
-export default readJsonFile;
+export default readFile;
