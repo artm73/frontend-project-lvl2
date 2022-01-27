@@ -13,18 +13,20 @@
 - Generating a report in different formats: <a href="#plain">plain text</a>, <a href="#stylish">stylish</a> and <a href="#json-formatter">json</a>
 - The program can work with both relative and absolute paths to files
 
-    <h3>Stylish</h3>
+ **Stylish**
 
 
 [![asciicast](https://asciinema.org/a/uOIdHaXrUxaNVLzEeRvYeEJtX.svg)](https://asciinema.org/a/uOIdHaXrUxaNVLzEeRvYeEJtX)
 
 
-    <h3>Plain</h3>
+
+ **Plain**
 
 
 [![asciicast](https://asciinema.org/a/464786.svg)](https://asciinema.org/a/464786)
 
-    <h3>JSON</h3>
+
+ **JSON**
 
 
 [![asciicast](https://asciinema.org/a/464787.svg)](https://asciinema.org/a/464787)
