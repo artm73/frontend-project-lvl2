@@ -18,12 +18,12 @@
 
 [![asciicast](https://asciinema.org/a/uOIdHaXrUxaNVLzEeRvYeEJtX.svg)](https://asciinema.org/a/uOIdHaXrUxaNVLzEeRvYeEJtX)
 
-<div id="plain">
+
     <h3>Plain</h3>
 </div>
 
 [![asciicast](https://asciinema.org/a/464786.svg)](https://asciinema.org/a/464786)
-<div id="json-formatter">
+
     <h3>JSON</h3>
 </div>
 
