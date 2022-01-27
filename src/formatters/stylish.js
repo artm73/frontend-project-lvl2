@@ -1,9 +1,32 @@
-const stylish = (value, replacer = ' ', spacesCount = 4) => {
-  const iter = (currentValue, depth) => {
-    if (typeof currentValue !== 'object' || currentValue === null) {
-      return `${currentValue}`;
+import _ from 'lodash';
+
+const stylish = (node) => {
+  const replacer = ' ';
+  const spacesCount = 4;
+
+  const formatValue = (value, depth) => {
+    if (!_.isPlainObject(value) || value === null) {
+      return value;
     }
 
+    const nestedIndentSize = (spacesCount * depth);
+    const nestedIndent = replacer.repeat(nestedIndentSize);
+
+    const previousDepth = depth - 1;
+    const bracketIndentSize = spacesCount * previousDepth;
+    const bracketIndent = replacer.repeat(bracketIndentSize);
+
+    const entries = Object.entries(value);
+    const lines = entries.map(([key, val]) => `${nestedIndent}${key}: ${formatValue(val, depth + 1)}`);
+
+    return [
+      '{',
+      ...lines,
+      `${bracketIndent}}`,
+    ].join('\n');
+  };
+
+  const iter = (currentNode, depth) => {
     const diffIndentSize = 2;
     const indentSize = (spacesCount * depth) - diffIndentSize;
     const currentIndent = replacer.repeat(indentSize);
@@ -12,20 +35,29 @@ const stylish = (value, replacer = ' ', spacesCount = 4) => {
     const bracketIndentSize = spacesCount * previousDepth;
     const bracketIndent = replacer.repeat(bracketIndentSize);
 
-    const diffs = { removed: '-', added: '+', unchanged: ' ' };
+    const lines = currentNode
+      .map((child) => {
+        const currentStatus = child.status;
 
-    const lines = Object
-      .entries(currentValue)
-      .map(([key, val]) => {
-        const currentDiff = val[0];
-        const unmodifiedValue = val[1];
-        const modifiedValue = val[2];
+        switch (currentStatus) {
+          case 'nested':
+            return `${currentIndent}  ${child.name}: ${iter(child.children, depth + 1)}`;
 
-        if (currentDiff === 'updated') {
-          return `${currentIndent}${diffs.removed} ${key}: ${iter(unmodifiedValue, depth + 1)}\n${currentIndent}${diffs.added} ${key}: ${iter(modifiedValue, depth + 1)}`;
+          case 'unchanged':
+            return `${currentIndent}  ${child.name}: ${formatValue(child.value, depth + 1)}`;
+
+          case 'removed':
+            return `${currentIndent}- ${child.name}: ${formatValue(child.value, depth + 1)}`;
+
+          case 'added':
+            return `${currentIndent}+ ${child.name}: ${formatValue(child.value, depth + 1)}`;
+
+          case 'updated':
+            return `${currentIndent}- ${child.name}: ${formatValue(child.oldValue, depth + 1)}\n${currentIndent}+ ${child.name}: ${formatValue(child.newValue, depth + 1)}`;
+
+          default:
+            throw new Error(`Unknown difference: '${currentStatus}'!`);
         }
-
-        return `${currentIndent}${diffs[currentDiff]} ${key}: ${iter(unmodifiedValue, depth + 1)}`;
       });
 
     return [
@@ -35,7 +67,7 @@ const stylish = (value, replacer = ' ', spacesCount = 4) => {
     ].join('\n');
   };
 
-  return iter(value, 1);
+  return iter(node, 1);
 };
 
 export default stylish;

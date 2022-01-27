@@ -1,48 +1,49 @@
-import path from 'path';
+import _ from 'lodash';
 
-const stringify = (val) => {
-  if (val !== null && typeof val === 'object') {
+const stringify = (value) => {
+  if (_.isPlainObject(value) && value !== null) {
     return '[complex value]';
   }
-  if (typeof val === 'string') {
-    return `'${val}'`;
+  if (typeof value === 'string') {
+    return `'${value}'`;
   }
-  return val;
+  return value;
 };
 
-const plain = (value) => {
-  const iter = (currentValue, ancestry) => {
-    if (typeof currentValue !== 'object' || currentValue === null) {
-      return '';
-    }
+const plain = (node) => {
+  const iter = (currentNode, ancestry, delimiter) => {
+    const lines = currentNode
+      .map((child) => {
+        const newAncestry = `${ancestry}${delimiter}${child.name}`;
+        const currentStatus = child.status;
+        const newDelimiter = '.';
 
-    const lines = Object
-      .entries(currentValue)
-      .map(([key, val]) => {
-        const newAncestry = (path.join(ancestry, key)).replaceAll('/', '.');
-        const currentDiff = val[0];
-        const unmodifiedValue = stringify(val[1]);
-        const modifiedValue = stringify(val[2]);
+        switch (currentStatus) {
+          case 'nested':
+            return iter(child.children, newAncestry, newDelimiter);
 
-        if (currentDiff === 'unchanged') {
-          return iter(val[1], newAncestry);
+          case 'unchanged':
+            return '';
+
+          case 'removed':
+            return `Property '${newAncestry}' was removed`;
+
+          case 'added':
+            return `Property '${newAncestry}' was added with value: ${stringify(child.value)}`;
+
+          case 'updated':
+            return `Property '${newAncestry}' was updated. From ${stringify(child.oldValue)} to ${stringify(child.newValue)}`;
+
+          default:
+            throw new Error(`Unknown difference: '${currentStatus}'!`);
         }
-        if (currentDiff === 'removed') {
-          return `Property '${newAncestry}' was removed`;
-        }
-
-        if (currentDiff === 'added') {
-          return `Property '${newAncestry}' was added with value: ${unmodifiedValue}`;
-        }
-
-        return `Property '${newAncestry}' was updated. From ${unmodifiedValue} to ${modifiedValue}`;
       })
       .filter((line) => line.length !== 0);
 
     return lines.join('\n');
   };
 
-  return iter(value, '');
+  return iter(node, '', '');
 };
 
 export default plain;
