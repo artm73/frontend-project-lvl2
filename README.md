@@ -13,7 +13,6 @@
 - Generating a report in different formats: <a href="#plain">plain text</a>, <a href="#stylish">stylish</a> and <a href="#json-formatter">json</a>
 - The program can work with both relative and absolute paths to files
 
-div id="stylish">
     <h3>Stylish</h3>
 </div>
 
