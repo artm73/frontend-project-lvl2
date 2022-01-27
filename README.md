@@ -14,17 +14,17 @@
 - The program can work with both relative and absolute paths to files
 
     <h3>Stylish</h3>
-</div>
+
 
 [![asciicast](https://asciinema.org/a/uOIdHaXrUxaNVLzEeRvYeEJtX.svg)](https://asciinema.org/a/uOIdHaXrUxaNVLzEeRvYeEJtX)
 
 
     <h3>Plain</h3>
-</div>
+
 
 [![asciicast](https://asciinema.org/a/464786.svg)](https://asciinema.org/a/464786)
 
     <h3>JSON</h3>
-</div>
+
 
 [![asciicast](https://asciinema.org/a/464787.svg)](https://asciinema.org/a/464787)
